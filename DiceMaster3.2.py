@@ -1,72 +1,80 @@
-#Libraries
+# Libraries
 import os
 import random
-#Cleaning the terminal
+# Cleaning the Terminal
 def clear():
     if os.name == "nt":
         os.system("cls")
     else:
         os.system("clear")
 clear()
-#Displaying the menu
+# Displaying the Menu
 starting = False
 quitting = False
 menu_attempts = 0
-print ("Greetings, dear user. Welcome to DiceMaster powered by Luimi.\n")
-print ("Type 's' for STARTING. DISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
-print ("Type 'i' for INSTRUCTIONS.\n")
-print ("Type 'q' for QUITTING.\n")
-print ("DiceMaster v3.1 - August 2022\n")
+print ("Greetings, dear user. Welcome to DiceMaster powered by Luimi.\n\nType 's' for STARTING.\nType 'i' for INSTRUCTIONS.\nType 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n\nDiceMaster v3.2 - August 2022\n")
 menu_input = str(input ())
 while (starting != True) or (quitting != True):
-    #Starting from menu
+    # Starting from Menu
     if (menu_input == "s") or (menu_input == "S"):
         starting = True
         break
+    # Quitting from Menu
+    elif (menu_input == "q") or (menu_input == "Q"):
+        quitting = True
+        break
+    # Displaying Instructions
     elif (menu_input == "i") or (menu_input == "I"):
-        #Displaying Instructions
-        print ("\nINSTRUCTIONS\nYou can now roll any kind of dice as many times you desire.\nIt's as simply as writing first how many dices you want to roll, later write 'd' and next how many faces does that kind of dice have. \nNOTE: Please, don't press the space bar between these things.\nFor example:\n If you write '2d6', this will roll 2 dices of 6 faces.\nIf you write '100d20', this will roll 100 dices of 20 faces. Got it?\n")
-        instructions_input = str(input ("Wanna try? Type 's' for STARTING or type 'q' for quitting: "))
+        menu_input = ""
         instructions_attempts = 0
+        clear ()
+        print ("INSTRUCTIONS\n\nYou can now roll any kind of dice as many times you desire.\nIt's as simply as writing first how many dices you want to roll, later write 'd' and next how many faces does that kind of dice have.\nNOTE: Please, don't press the space bar between these things.\nFor example:\nIf you write '2d6', this will roll 2 dices of 6 faces.\nIf you write '100d20', this will roll 100 dices of 20 faces. Got it?\n")
+        instructions_input = str(input ("Wanna try? Type 's' for STARTING or type 'q' for quitting: "))
         while (starting != True) or (quitting != True):
-            #Starting from instructions
+            # User types 's'
             if (instructions_input == "s") or (instructions_input == "S"):
                 starting = True
                 break
-            #Quitting from instructions
+            # User types 'q'
             elif (instructions_input == "q") or (instructions_input == "Q"):
                 quitting = True
                 break
+            # User types something else
             else:
                 print ("Sorry, I don't understand. Type 's' for STARTING or 'q' for quitting")
                 instructions_input = str(input ())
                 instructions_attempts += 1
-                #Quitting from instruction repetition 
-                if (instructions_attempts == 5):
-                    print ("I'm afraid you are just looping too much. The program is about to quit due to exaggerated repetition. Apologizes for the inconveniences.")
+                # Quitting from Instructions repetition 
+                if (instructions_attempts == 4):
+                    print ("\nI'm afraid you are just looping too much. The program is about to quit due to exaggerated repetition. Apologizes for the inconveniences.")
                     quitting = True
                     break
                 continue
-    #Quitting from menu
-    elif (menu_input == "q") or (menu_input == "Q"):
-        quitting = True
-        break
+        # Starting from Instructions
+        if (instructions_input == "s") or (instructions_input == "S"):
+                break
+        # Quitting from Instructions
+        elif (instructions_input == "q") or (instructions_input == "Q"):
+                break
+    # User types something else that 's','q' or 'i' in the Menu
     else:
         print ("Sorry, I don't understand. Type 's' for STARTING, 'i' for INSTRUCTIONS or 'q' for QUITTING")
         menu_input = str(input ())
         menu_attempts += 1
-        if (menu_attempts == 5):
-            print ("I'm afraid you are just looping too much. The program is about to quit due to exaggerated repetition. Apologizes for the inconveniences.")
+        # Quitting from Menu repetition
+        if (menu_attempts == 4):
+            print ("\nI'm afraid you are just looping too much. The program is about to quit due to exaggerated repetition. Apologizes for the inconveniences.")
             quitting = True
             break
         continue
-# \nMany games are based on the use of dices. But unfortunately not all the dices used in games have 6 faces (d6), many have an uncommon number of faces and we don't have that specific kind of dice in home :(\nOr may be the case that a game asked to roll a huge quantity of dices, that we don't have\n\nThis is when DiceMaster comes in.")
 # Starting DiceMaster
 if (starting == True):
     clear()
     first_time = True
     choice = ""
     error_reason=""
+    if (choice == "q") or (choice == "Q") or (choice =="quit") or (choice == "Quit") or (choice == "QUIT"):
+        quitting = True
     while (choice != "q") or (choice != "Q") or (choice !="quit") or (choice != "Quit") or (choice != "QUIT"):
         try:
             times = ""
@@ -76,9 +84,10 @@ if (starting == True):
             if first_time == True:
                 choice = str(input("If you're so kind, please write what you want to roll (Type 'q' to quit): "))
                 first_time = False
-            elif (first_time == False) and (error==False):
+            elif (first_time == False) and (error == False):
                 choice = str(input("If you want, you can roll something else or type 'q' to quit: "))
             if (choice == "q") or (choice == "Q") or (choice =="quit") or (choice == "Quit") or (choice == "QUIT"):
+                quitting = True
                 break
             d_times = 0
             for x in choice:
@@ -148,6 +157,6 @@ if (starting == True):
             choice = str(input("Let's try again. What do you wanna roll (Type q to quit): "))
             error = True
             continue
-#Quitting program
+# Quitting Program
 if quitting == True :
-    print ("\nThanks for using this program. Hope you enjoyed it. Come back soon :D\nPowered by Luimi")
+    print ("\nThanks for using DiceMaster (v3.2). Hope you enjoyed it. Come back soon :D\nPowered by Luimi")

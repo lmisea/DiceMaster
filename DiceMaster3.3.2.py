@@ -1,8 +1,10 @@
-# DiceMaster version 3.3.1 - August 2022. Caracas, Venezuela.
+# DiceMaster version 3.3.2 - August 2022. Caracas, Venezuela.
 # Luis Miguel Isea - @LuimiDev (GitHub).
 
+from email.policy import default
 import os
 import random
+from tabulate import tabulate
 
 def clear():
     if os.name == "nt":
@@ -15,7 +17,7 @@ starting = False    # When is set to True, the main functionality initializes.
 quitting = False    # Whenever is set to True, the program is terminated.
 
 # Displaying menu.
-print ("DiceMaster v3.3.1 - Powered by LuimiDev.\n\nType 's' for STARTING.\nType 'i' for INSTRUCTIONS.\nType 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print ("DiceMaster v3.3.2 - Powered by LuimiDev.\n\nType 's' for STARTING.\nType 'i' for INSTRUCTIONS.\nType 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 menu_input = str(input ())
 menu_attempts = 0    # Used to avoid exaggerated repetition.
@@ -90,13 +92,10 @@ if (starting == True):
         try:
             dice_quantity = ""    # How many dice are going to be roll.
             dice_faces = ""       # How many faces does that kind of dice have.
-            bonus = ""            # Bonus value added to the total sum of the dice rolled.
-            penalty = ""          # Penalty value removed to the total sum of the dice rolled.
             d_times = 0           # How many 'd' are in user's input.
-            mod_to_do = ""        # Used to detect bonuses or penalties in user's input.
             die_dice = ""         # Specifies singular or plural in the roll result message.
             face_faces = ""       # Specifies singular or plural in the roll result message.
-            sum_message = ""      # Allows different roll result Message when rolling 1 die.
+            sum_message = ""      # Allows different roll result message when rolling 1 die.
             summation = 0         # The sum of all the results of rolled dice.
             result_list = []      # The record of each dice result.
             
@@ -120,6 +119,11 @@ if (starting == True):
                 # User typed a different letter than 'd'.
                 if (character.isalpha()) and (character != "d"):
                     error_reason = "It cannot be typed a letter that is not 'd'."
+                    raise ValueError
+                
+                # User typed a punctuation character that is not "+" or "-".
+                if (character.isdigit() == False) and (character.isspace() == False) and (character != "d") and (character != "+") and (character != "-"):
+                    error_reason = "It cannot be typed a punctuation character that is not '+' or '-'."
                     raise ValueError
                 
                 # Counting letters 'd' in user's input.
@@ -152,6 +156,7 @@ if (starting == True):
                 raise ValueError
             
             dice_quantity = int(dice_quantity)    # By default is a string, we need a number.
+            original_dice_quantity = dice_quantity
             
             # Rolling 0 dice.
             if (dice_quantity == 0):
@@ -171,9 +176,13 @@ if (starting == True):
             list_input = list(user_input)    # Converting user's input into a list.
             d = user_input.index("d") + 1    # The position of the 'd' in user's input.
             f = len(list_input)              # How many characters does user's input have.
-            mod_value = ""
-            mod_type = ""
-            mod_idx = ""
+            mod_to_do = ""        # Used to detect bonuses or penalties in user's input.
+            mod_type = ""         # Used to determinate if the modifier is a bonus or penalty.
+            mod_value = ""        # Defines by what value is modified the final result.
+            mod_idx = ""          # The position of the modifier in user's input.
+            original_mod_idx = "" # Helps detect if more than 1 modifier were typed.
+            bonus = ""            # Bonus value added to the total sum of the dice rolled.
+            penalty = ""          # Penalty value removed to the total sum of the dice rolled.
             
             # Part after the 'd' in user's input.
             for character in range(d,f):
@@ -198,19 +207,23 @@ if (starting == True):
                     mod_value = 0
                     break
                     
+            # If there's one modifier that the program hasn't determinate its value.        
             while (mod_to_do == True):
                         
-                mod_to_do = False
+                mod_to_do = False    # If it's the last modifier this won't run again.
                 original_mod_idx = mod_idx
-                        
+                
+                # Checking what comes after the modifier.        
                 for character in range(mod_idx,f):
                         
+                    # A number comes next.    
                     if (list_input[character].isdigit()):
                         if (mod_type == "bonus"):
                             bonus += str(list_input[character])
                         elif (mod_type == "penalty"):
                             penalty += str(list_input[character])
-                            
+                    
+                    # A bonus comes next        
                     elif (list_input[character] == "+"):
                         if (bonus != ""):
                             mod_value += int(bonus)
@@ -222,7 +235,8 @@ if (starting == True):
                         mod_type = "bonus"
                         mod_idx = user_input.index("+",original_mod_idx,f) + 1
                         break
-                        
+                    
+                    # A penalty comes next    
                     elif (list_input[character] == "-"):
                         if (bonus != ""):
                             mod_value += int(bonus)
@@ -234,13 +248,14 @@ if (starting == True):
                         mod_type = "penalty"
                         mod_idx = user_input.index("-",original_mod_idx,f) + 1
                         break
-                            
+                    
+                    # If it were found another modifier, repeat the process.        
                     if (mod_idx != original_mod_idx):
                         continue
-                            
+            
+            # If no new modifiers were found after the last one checked                 
             if (bonus != ""):
-                mod_value += int(bonus)
-                    
+                mod_value += int(bonus)        
             elif (penalty != ""):
                 mod_value -= int(penalty)
                     
@@ -264,40 +279,66 @@ if (starting == True):
             else:
                 face_faces = " faces"
                 
-            error = False    # If we run this code, there's no error in user's input.
-            
-            # Rolling dice.
-            for die in range(dice_quantity):
-                result = random.randint(1,dice_faces)
-                result_list.append(result)
-                summation += result
-            
-            # Displaying each dice result.    
+            error = False       # If we run this code, there's no error in user's input.
+            row_to_do = True    # Used to display several dice result lists when necessary,
             print ("\n")
-            print (result_list)
-            print ("\n")
+            
+            # Setting each dice result list width.
+            if (dice_faces <= 999):
+                list_width = 25
+            elif (dice_faces <= 9999):
+                list_width = 18
+            elif (dice_faces <= 99999):
+                list_width = 14
+            else:
+                list_width = 12
+            
+            # Rolling and displaying each dice result.
+            while (row_to_do == True):
+                
+                # Less than or equal to 35 dice missing to be rolled - Rolling all.
+                if (dice_quantity <= list_width):
+                    row_to_do = False
+                    for die in range(dice_quantity):
+                        result = random.randint(1,dice_faces)
+                        result_list.append(result)
+                        summation += result
+                    print (result_list)
+                    break
+                
+                # More than 35 dice missing to be rolled - Rolling only 35 this time.
+                if (dice_quantity > list_width):
+                    row_to_do = True
+                    dice_quantity -= list_width
+                    for die in range(list_width):
+                        result = random.randint(1,dice_faces)
+                        result_list.append(result)
+                        summation += result
+                    print (result_list)
+                    result_list = []
+                    continue    # Repeating process until there's at maximum 35 dice to roll.
                 
             # Roll result message (with bonus).
             if (mod_value != "") and (mod_value > 0):
                 summation += mod_value
-                print ("Done. Rolled " + str(dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " plus " + str(mod_value) + ".\n" + sum_message + " plus bonus: " + str(summation) + ".")
+                print ("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " plus " + str(mod_value) + ".\n" + sum_message + " plus bonus: " + str(summation) + ".")
                 
             # Roll result message (with penalty).  
             elif (mod_value != "") and (mod_value < 0):
                 mod_value = abs(mod_value)
                 summation -= mod_value
-                print ("Done. Rolled " + str(dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " minus " + str(mod_value) + ".\n" + sum_message + " minus penalty: " + str(summation) + ".")
+                print ("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " minus " + str(mod_value) + ".\n" + sum_message + " minus penalty: " + str(summation) + ".")
                 
             # Roll result message (modifiers cancelled themselves)
             elif (mod_value != "") and (mod_value == 0):
-                print ("Done. Rolled " + str(dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " (modifiers cancelled themselves).\n" + sum_message + " (the modifiers cancelled themselves): " + str(summation) + ".")
+                print ("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " (modifiers cancelled themselves).\n" + sum_message + " (the modifiers cancelled themselves): " + str(summation) + ".")
             
             # Roll result message (no bonus or penalty).    
             else:
-                print ("Done. Rolled " + str(dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + ".\n" + sum_message + ": " + str(summation) + ".")
+                print ("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + ".\n" + sum_message + ": " + str(summation) + ".")
             
             # Showing highest die only if more than 1 die was rolled.   
-            if (dice_quantity != 1):
+            if (original_dice_quantity != 1):
                 print("Highest die: " + str(max(result_list)) + ".")
             
         except:
@@ -310,4 +351,4 @@ if (starting == True):
         
 # Quitting program.
 if quitting == True :
-    print ("\nThanks for using DiceMaster (v3.3.1). Hope you enjoyed it.\nPowered by LuimiDev.")
+    print ("\nThanks for using DiceMaster (v3.3.2). Hope you enjoyed it.\nPowered by LuimiDev.")

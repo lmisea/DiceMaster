@@ -1,10 +1,8 @@
 # DiceMaster version 3.3.2 - August 2022. Caracas, Venezuela.
 # Luis Miguel Isea - @LuimiDev (GitHub).
 
-from email.policy import default
 import os
 import random
-from tabulate import tabulate
 
 def clear():
     if os.name == "nt":
@@ -296,7 +294,7 @@ if (starting == True):
             # Rolling and displaying each dice result.
             while (row_to_do == True):
                 
-                # Less than or equal to 35 dice missing to be rolled - Rolling all.
+                # Less than or equal the list_width value dice missing to be rolled - Rolling all.
                 if (dice_quantity <= list_width):
                     row_to_do = False
                     for die in range(dice_quantity):
@@ -306,7 +304,7 @@ if (starting == True):
                     print (result_list)
                     break
                 
-                # More than 35 dice missing to be rolled - Rolling only 35 this time.
+                # More than list_width value dice missing to be rolled - Rolling only list width this time.
                 if (dice_quantity > list_width):
                     row_to_do = True
                     dice_quantity -= list_width
@@ -316,7 +314,7 @@ if (starting == True):
                         summation += result
                     print (result_list)
                     result_list = []
-                    continue    # Repeating process until there's at maximum 35 dice to roll.
+                    continue    # Repeating process until there's at maximum the list_width value dice to roll.
                 
             # Roll result message (with bonus).
             if (mod_value != "") and (mod_value > 0):

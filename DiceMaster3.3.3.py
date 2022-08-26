@@ -1,4 +1,4 @@
-# DiceMaster version 3.3.2 - August 2022. Caracas, Venezuela.
+# DiceMaster version 3.3.3 - August 2022. Caracas, Venezuela.
 # Luis Miguel Isea - @LuimiDev (GitHub).
 
 import os
@@ -15,7 +15,7 @@ starting = False    # When is set to True, the main functionality initializes.
 quitting = False    # Whenever is set to True, the program is terminated.
 
 # Displaying menu.
-print ("DiceMaster v3.3.2 - Powered by LuimiDev.\n\nType 's' for STARTING.\nType 'i' for INSTRUCTIONS.\nType 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print ("DiceMaster v3.3.3 - Powered by LuimiDev.\n\nType 's' for STARTING.\nType 'i' for INSTRUCTIONS.\nType 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 menu_input = str(input ())
 menu_attempts = 0    # Used to avoid exaggerated repetition.
@@ -279,42 +279,39 @@ if (starting == True):
                 
             error = False       # If we run this code, there's no error in user's input.
             row_to_do = True    # Used to display several dice result lists when necessary,
-            print ("\n")
+            print ("")
             
             # Setting each dice result list width.
-            if (dice_faces <= 999):
+            if (dice_faces <= 99):
                 list_width = 25
+            elif (dice_faces <= 999):
+                list_width = 22
             elif (dice_faces <= 9999):
                 list_width = 18
             elif (dice_faces <= 99999):
-                list_width = 14
+                list_width = 16
             else:
                 list_width = 12
+                
+            dice_faces_digits = len(str(dice_faces))    # Used to justify each dice result.
             
-            # Rolling and displaying each dice result.
-            while (row_to_do == True):
+            # Rolling and displaying each dice result
+            for die in range(dice_quantity):
                 
-                # Less than or equal the list_width value dice missing to be rolled - Rolling all.
-                if (dice_quantity <= list_width):
-                    row_to_do = False
-                    for die in range(dice_quantity):
-                        result = random.randint(1,dice_faces)
-                        result_list.append(result)
-                        summation += result
-                    print (result_list)
-                    break
+                result = random.randint(1,dice_faces)
+                result_list.append(result)
+                summation += result
                 
-                # More than list_width value dice missing to be rolled - Rolling only list width this time.
-                if (dice_quantity > list_width):
-                    row_to_do = True
-                    dice_quantity -= list_width
-                    for die in range(list_width):
-                        result = random.randint(1,dice_faces)
-                        result_list.append(result)
-                        summation += result
-                    print (result_list)
-                    result_list = []
-                    continue    # Repeating process until there's at maximum the list_width value dice to roll.
+                if (die % list_width != list_width - 1) and (die != dice_quantity -1):
+                    print (repr(result).rjust(dice_faces_digits),end="  ")
+                    
+                elif (die == dice_quantity -1):
+                    print (repr(result).rjust(dice_faces_digits),end="")
+                    
+                else:
+                    print (repr(result).rjust(dice_faces_digits),end="\n")
+            
+            print("",end="\n")
                 
             # Roll result message (with bonus).
             if (mod_value != "") and (mod_value > 0):
@@ -349,4 +346,4 @@ if (starting == True):
         
 # Quitting program.
 if quitting == True :
-    print ("\nThanks for using DiceMaster (v3.3.2). Hope you enjoyed it.\nPowered by LuimiDev.")
+    print ("\nThanks for using DiceMaster (v3.3.3). Hope you enjoyed it.\nPowered by LuimiDev.")

@@ -13,14 +13,13 @@ def clear():
     else:
         os.system("clear")
 
+
 clear()
 
-starting = False                # When is set to True, the main functionality initializes.
-quitting = False                # Whenever is set to True, the program is terminated.
-display_instructions = False    # When is set to True, the instructions are displayed.
-# menu_attempts = 0              # Used to avoid exaggerated repetition.
-# instructions_attempts = 0      # Used to avoid exaggerated repetition.
-instructions_page = 1           # Used to display different instructions for every page.
+starting = False
+quitting = False
+display_instructions = False
+instructions_page = 1
 
 first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nIt's as simply as writing first how many dice you want to roll, later write 'd' and next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' for STARTING or 'q' for QUITTING."
 
@@ -34,7 +33,6 @@ def menu_press(key):
     When 'q' is pressed, the program shuts down.\n
     When any other key is pressed, doesn't trigger anything.
     """
-    # global menu_attempts
     global starting
     global display_instructions
     global quitting
@@ -51,15 +49,6 @@ def menu_press(key):
         sshkeyboard.stop_listening()
         quitting = True
         return
-    # else:
-    #     if (menu_attempts < 4):
-    #         menu_attempts += 1
-    #         print("\nSorry, unable to understand.\nPress 's' for STARTING, 'i' for INSTRUCTIONS or 'q' for QUITTING.")
-    #     elif (menu_attempts == 4):
-    #         print("\nYou are looping too much. Quitting program due to exaggerated repetition. Apologizes for the inconveniences.")
-    #         sshkeyboard.stop_listening()
-    #         quitting = True
-    #         return
 
 
 def instructions_press(key):
@@ -70,7 +59,6 @@ def instructions_press(key):
     When 'q' is pressed, the program shuts down.
     When any other key is pressed, doesn't trigger anything.
     """
-    # global instructions_attempts
     global instructions_page
     global starting
     global quitting
@@ -91,19 +79,6 @@ def instructions_press(key):
         quitting = True
         sshkeyboard.stop_listening()
         return
-    # else:
-    #     if (instructions_page == 1) and (instructions_attempts < 4):
-    #         instructions_attempts += 1
-    #         print(
-    #             "\nSorry, unable to understand.\nPress 'n' for NEXT PAGE, 's' for STARTING or 'q' for QUITTING.")
-    #     elif (instructions_page == 2) and (instructions_attempts < 4):
-    #         instructions_attempts += 1
-    #         print("\nSorry, unable to understand.\nPress 'p' for PREVIOUS PAGE, 's' for STARTING or 'q' for QUITTING.")
-    #     else:
-    #         print("\nYou are looping too much. Quitting program due to exaggerated repetition. Apologizes for the inconveniences.")
-    #         quitting = True
-    #         sshkeyboard.stop_listening()
-    #         return
 
 
 def rolling_press(key):
@@ -125,44 +100,47 @@ def rolling_press(key):
         quitting = True
         return
 
+
 # Displaying menu.
-print("DiceMaster v3.3.4 - Powered by LuimiDev.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print("DiceMaster v3.3.4 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 sshkeyboard.listen_keyboard(on_press=menu_press, until="")
 
 # User pressed 'i' - Displaying instructions.
 if (display_instructions == True):
     clear()
-    print(first_page_message)    # Instructions message.
+    print(first_page_message)
     sshkeyboard.listen_keyboard(on_press=instructions_press, until="")
 
 # Starting DiceMaster.
 if (starting == True):
     clear()
-    first_time = True    # Allows unique first time roll message.
-    error_reason = ""    # Explains the user what went wrong.
+    first_time = True
+    error_reason = ""
 
     while (quitting != True):
 
         try:
-            dice_quantity = ""    # How many dice are going to be roll.
-            dice_faces = ""       # How many faces does that kind of dice have.
-            d_times = 0           # How many 'd' are in user's input.
-            die_dice = ""         # Specifies singular or plural in the roll result message.
-            face_faces = ""       # Specifies singular or plural in the roll result message.
-            sum_message = ""      # Allows different roll result message when rolling 1 die.
-            summation = 0         # The sum of all the results of rolled dice.
-            result_list = []      # The record of each dice result.
+            dice_quantity = ""
+            dice_faces = ""
+            d_times = 0
+            die_dice = ""
+            face_faces = ""
+            sum_message = ""
+            summation = 0
+            result_list = []
 
             # First time roll message.
             if (first_time == True):
-                user_input = str(input("Please, write what you want to roll (Type 'q' to Quit): "))
+                user_input = str(
+                    input("Please, write what you want to roll (Type 'q' to Quit): "))
                 # sshkeyboard.listen_keyboard(on_press=rolling_press, until="")
                 first_time = False
 
             # Further time roll message.
             elif (first_time == False) and (error == False):
-                user_input = str(input("\nRoll something else? (Type 'q' to Quit): "))
+                user_input = str(
+                    input("\nRoll something else? (Type 'q' to Quit): "))
                 # sshkeyboard.listen_keyboard(on_press=rolling_press, until="")
 
             # User typed 'q'.
@@ -231,19 +209,19 @@ if (starting == True):
                 die_dice = " dice"
                 sum_message = "Total sum"
 
-            list_input = list(user_input)    # Converting user's input into a list.
-            d = user_input.index("d") + 1    # The position of the 'd' in user's input.
-            f = len(list_input)              # How many characters does user's input have.
-            original_mod_idx = ""    # Helps detect if more than 1 modifier were typed.
-            mod_to_do = ""        # Used to detect bonuses or penalties in user's input.
-            mod_type = ""         # Used to determinate if the modifier is a bonus or penalty.
-            mod_value = ""        # Defines by what value is modified the final result.
-            mod_idx = ""          # The position of the modifier in user's input.
-            bonus = ""            # Bonus value added to the total sum of the dice rolled.
-            penalty = ""          # Penalty value removed to the total sum of the dice rolled.
+            list_input = list(user_input)
+            d_idx = user_input.index("d") + 1
+            final_char = len(list_input)
+            original_mod_idx = ""
+            mod_to_do = ""
+            mod_type = ""
+            mod_value = ""
+            mod_idx = ""
+            bonus = ""
+            penalty = ""
 
             # Part after the 'd' in user's input.
-            for character in range(d, f):
+            for character in range(d_idx, final_char):
 
                 # Setting number of faces that the dice will have.
                 if (list_input[character].isdigit()):
@@ -273,7 +251,7 @@ if (starting == True):
                 original_mod_idx = mod_idx
 
                 # Checking what comes after the modifier.
-                for character in range(mod_idx, f):
+                for character in range(mod_idx, final_char):
 
                     # A number comes next.
                     if (list_input[character].isdigit()):
@@ -292,7 +270,8 @@ if (starting == True):
                         penalty = ""
                         mod_to_do = True
                         mod_type = "bonus"
-                        mod_idx = user_input.index("+", original_mod_idx, f) + 1
+                        mod_idx = user_input.index(
+                            "+", original_mod_idx, final_char) + 1
                         break
 
                     # A penalty comes next
@@ -305,7 +284,8 @@ if (starting == True):
                         penalty = ""
                         mod_to_do = True
                         mod_type = "penalty"
-                        mod_idx = user_input.index("-", original_mod_idx, f) + 1
+                        mod_idx = user_input.index(
+                            "-", original_mod_idx, final_char) + 1
                         break
 
                     # If it were found another modifier, repeat the process.
@@ -341,7 +321,7 @@ if (starting == True):
 
             # If we run this code, there's no error in user's input.
             error = False
-            
+
             # Used to display several dice result lists when necessary.
             row_to_do = True
             print("")
@@ -382,21 +362,25 @@ if (starting == True):
             # Roll result message (with bonus).
             if (mod_value != "") and (mod_value > 0):
                 summation += mod_value
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " plus " + str(mod_value) + ".\n" + sum_message + " plus bonus: " + str(summation) + ".")
+                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) +
+                      face_faces + " plus " + str(mod_value) + ".\n" + sum_message + " plus bonus: " + str(summation) + ".")
 
             # Roll result message (with penalty).
             elif (mod_value != "") and (mod_value < 0):
                 mod_value = abs(mod_value)
                 summation -= mod_value
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " minus " + str(mod_value) + ".\n" + sum_message + " minus penalty: " + str(summation) + ".")
+                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) +
+                      face_faces + " minus " + str(mod_value) + ".\n" + sum_message + " minus penalty: " + str(summation) + ".")
 
             # Roll result message (modifiers cancelled themselves)
             elif (mod_value != "") and (mod_value == 0):
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + " (modifiers cancelled themselves).\n" + sum_message + " (the modifiers cancelled themselves): " + str(summation) + ".")
+                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces +
+                      " (modifiers cancelled themselves).\n" + sum_message + " (the modifiers cancelled themselves): " + str(summation) + ".")
 
             # Roll result message (no bonus or penalty).
             else:
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces + ".\n" + sum_message + ": " + str(summation) + ".")
+                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(
+                    dice_faces) + face_faces + ".\n" + sum_message + ": " + str(summation) + ".")
 
             # Showing highest die only if more than 1 die was rolled.
             if (original_dice_quantity != 1):
@@ -407,10 +391,9 @@ if (starting == True):
             # Error message with its reason.
             print("\nSorry, unable to understand.\nReason: " + error_reason)
             user_input = str(input("\nPlease, try again (Type 'q' to Quit): "))
-            # It won't ask again what to roll when repeating the loop.
             error = True
             continue
 
 # Quitting program.
 if (quitting == True):
-    print("\nThanks for using DiceMaster (v3.3.4). Hope you enjoyed it.\nPowered by LuimiDev.")
+    print("\nThanks for using DiceMaster (v3.3.4). Hope you enjoyed it.\nPowered by Luis M. Isea.")

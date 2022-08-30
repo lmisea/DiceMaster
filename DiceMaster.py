@@ -167,6 +167,7 @@ if (starting == True):
 
             # User typed 'q'.
             if (user_input == "q") or (user_input == "Q") or (user_input == "quit") or (user_input == "QUIT") or (user_input == "quit"):
+                quitting = True
                 break
 
             # User typed something else than 'q'.

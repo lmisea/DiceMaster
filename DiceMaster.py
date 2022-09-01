@@ -1,4 +1,4 @@
-# DiceMaster version 3.3.4 - August 2022. Caracas, Venezuela.
+# DiceMaster version 3.3.5 - September 2022. Caracas, Venezuela.
 # Luis Miguel Isea - @LuimiDev (GitHub).
 
 import os
@@ -17,13 +17,12 @@ def clear():
 clear()
 
 starting = False
-quitting = False
 display_instructions = False
 instructions_page = 1
 
-first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nIt's as simply as writing first how many dice you want to roll, later write 'd' and next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' for STARTING or 'q' for QUITTING."
+first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nIt's as simply as writing first how many dice you want to roll, later write 'd' and next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' to START ROLLING or 'q' for QUITTING."
 
-second_page_message = "HOW TO ADD A BONUS?\nAfter the standard syntax for rolling, just add '+' and then the bonus value. This will increase the total sum of the dice rolled by the bonus value.\nHOW TO ADD A PENALTY?\nAfter the standard syntax for rolling, just add '-' and then the penalty value. This will decrease the total sum of the dice rolled by the penalty value.\nFor example:\nIf you write '1d8+2', this will roll 1 die of 8 faces plus a 2 bonus.\nIf you write '8d12 -5', this will roll 8 dice of 12 faces minus a 5 penalty.\n\nPress 'p' for PREVIOUS PAGE, 's' for STARTING or 'q' for QUITTING."
+second_page_message = "HOW TO ADD A BONUS?\nAfter the standard syntax for rolling, just add '+' and then the bonus value. This will increase the total sum of the dice rolled by the bonus value.\nHOW TO ADD A PENALTY?\nAfter the standard syntax for rolling, just add '-' and then the penalty value. This will decrease the total sum of the dice rolled by the penalty value.\nFor example:\nIf you write '1d8+2', this will roll 1 die of 8 faces plus a 2 bonus.\nIf you write '8d12 -5', this will roll 8 dice of 12 faces minus a 5 penalty.\n\nPress 'p' for PREVIOUS PAGE, 's' to START ROLLING or 'q' for QUITTING."
 
 
 def menu_press(key):
@@ -35,33 +34,28 @@ def menu_press(key):
     """
     global starting
     global display_instructions
-    global quitting
 
     if (key == "s"):
         sshkeyboard.stop_listening()
         starting = True
-        return
     elif (key == "i"):
         sshkeyboard.stop_listening()
         display_instructions = True
-        return
     elif (key == "q"):
         sshkeyboard.stop_listening()
-        quitting = True
-        return
 
 
 def instructions_press(key):
     """
-    When 'n' is pressed, the next instructions page is displayed.
-    When 'p' is pressed, the previous instructions page is displayed.
-    When 's' is pressed, starts the main functionality.
-    When 'q' is pressed, the program shuts down.
+    When 'n' is pressed, the next instructions page is displayed.\n
+    When 'p' is pressed, the previous instructions page is displayed.\n
+    When 's' is pressed, starts the main functionality.\n
+    When 'q' is pressed, the program shuts down.\n
     When any other key is pressed, doesn't trigger anything.
     """
     global instructions_page
     global starting
-    global quitting
+    starting = False
 
     if (key == "n") and (instructions_page == 1):
         instructions_page += 1
@@ -74,43 +68,26 @@ def instructions_press(key):
     elif (key == "s"):
         starting = True
         sshkeyboard.stop_listening()
-        return
-    elif (key == "q"):
-        quitting = True
-        sshkeyboard.stop_listening()
-        return
-
-
-def rolling_press(key):
-    """
-    When 'i' is pressed, the instructions are displayed.\n
-    When 'q' is pressed, the program shuts down.\n
-    When any other key is pressed, doesn't trigger anything.
-    """
-
-    global display_instructions
-    global quitting
-
-    if (key == "i"):
-        sshkeyboard.stop_listening()
-        display_instructions = True
-        return
+        instructions_page = 1
     elif (key == "q"):
         sshkeyboard.stop_listening()
-        quitting = True
-        return
+
+
+def instructions():
+    """Displays Instructions, for more info read instructions_press docstring."""
+    clear()
+    print(first_page_message)
+    sshkeyboard.listen_keyboard(on_press=instructions_press, until="")
 
 
 # Displaying menu.
-print("DiceMaster v3.3.4 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print("DiceMaster v3.3.5 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 sshkeyboard.listen_keyboard(on_press=menu_press, until="")
 
 # User pressed 'i' - Displaying instructions.
 if (display_instructions == True):
-    clear()
-    print(first_page_message)
-    sshkeyboard.listen_keyboard(on_press=instructions_press, until="")
+    instructions()
 
 # Starting DiceMaster.
 if (starting == True):
@@ -118,37 +95,41 @@ if (starting == True):
     first_time = True
     error_reason = ""
 
-    while (quitting != True):
+    while True:  # Breaks when user types 'q'.
 
         try:
             dice_quantity = ""
             dice_faces = ""
             d_times = 0
-            die_dice = ""
-            face_faces = ""
-            sum_message = ""
             summation = 0
             result_list = []
 
             # First time roll message.
             if (first_time == True):
                 user_input = str(
-                    input("Please, write what you want to roll (Type 'q' to Quit): "))
-                # sshkeyboard.listen_keyboard(on_press=rolling_press, until="")
+                    input("Please, write what you want to roll ('q' to Quit, 'h' for Help): ")).lower()
                 first_time = False
 
             # Further time roll message.
             elif (first_time == False) and (error == False):
                 user_input = str(
-                    input("\nRoll something else? (Type 'q' to Quit): "))
-                # sshkeyboard.listen_keyboard(on_press=rolling_press, until="")
+                    input("\nRoll something else? (Type 'q' to Quit): ")).lower()
 
             # User typed 'q'.
-            if (user_input == "q") or (user_input == "Q") or (user_input == "quit") or (user_input == "QUIT") or (user_input == "quit"):
-                quitting = True
+            if (user_input == "q") or (user_input == "quit"):
                 break
 
-            # User typed something else than 'q'.
+            # User typed 'h'.
+            if (user_input == "h") or (user_input == "help"):
+                instructions()
+                if (starting == True):
+                    clear()
+                    first_time = True
+                    continue
+                else:
+                    break
+
+            # Checking if the user's input is valid.
             for character in user_input:
 
                 # User typed a different letter than 'd'.
@@ -175,10 +156,9 @@ if (starting == True):
                 error_reason = "The letter 'd' must be typed once and only once."
                 raise ValueError
 
-            # User typed only numbers and 1 'd': a valid input.
+            # Setting quantity of dice to be rolled.
             for character in user_input:
 
-                # Setting quantity of dice to be rolled.
                 if (character != "d"):
                     dice_quantity += str(character)
                     # If we use '+= int(character)', we could not handle numbers of two or more digits. E.g.: '24' would become 6.
@@ -190,7 +170,6 @@ if (starting == True):
                 error_reason = "Before the letter 'd', it must be typed the number of dice to be rolled."
                 raise ValueError
 
-            # By default is a string, we need a number.
             dice_quantity = int(dice_quantity)
             original_dice_quantity = dice_quantity
 
@@ -199,12 +178,10 @@ if (starting == True):
                 error_reason = "It's impossible to roll 0 dice."
                 raise ValueError
 
-            # Rolling 1 die.
+            # Setting singular or plural.
             if (dice_quantity == 1):
                 die_dice = " die"
                 sum_message = "Result"
-
-            # Rolling more than 1 die.
             else:
                 die_dice = " dice"
                 sum_message = "Total sum"
@@ -212,11 +189,8 @@ if (starting == True):
             list_input = list(user_input)
             d_idx = user_input.index("d") + 1
             final_char = len(list_input)
-            original_mod_idx = ""
             mod_to_do = ""
-            mod_type = ""
             mod_value = ""
-            mod_idx = ""
             bonus = ""
             penalty = ""
 
@@ -303,7 +277,6 @@ if (starting == True):
                 error_reason = "After the letter 'd', it must be typed the number of faces that the dice will have."
                 raise ValueError
 
-            # By default is a string, we need a number.
             dice_faces = int(dice_faces)
 
             # Rolling dice of 0 faces.
@@ -311,22 +284,19 @@ if (starting == True):
                 error_reason = "It's impossible to roll dice of 0 faces."
                 raise ValueError
 
-            # Rolling dice of 1 face.
+            # Setting singular or plural.
             elif (dice_faces == 1):
                 face_faces = " face"
-
-            # Rolling dice of more than 1 face.
             else:
                 face_faces = " faces"
 
             # If we run this code, there's no error in user's input.
             error = False
 
-            # Used to display several dice result lists when necessary.
-            row_to_do = True
+            row_to_do = True  # Used to display each dice result.
             print("")
 
-            # Setting each dice result list width.
+            # For organized result output.
             if (dice_faces <= 99):
                 list_width = 25
             elif (dice_faces <= 999):
@@ -359,25 +329,22 @@ if (starting == True):
 
             print("", end="\n")
 
-            # Roll result message (with bonus).
-            if (mod_value != "") and (mod_value > 0):
+            # Roll result message (with modifier(s)).
+            if (mod_value != ""):
                 summation += mod_value
+                if (mod_value > 0):
+                    modifier = " plus " + str(abs(mod_value))
+                    mod_message = " plus bonus: "
+                elif (mod_value < 0):
+                    modifier = " minus " + str(abs(mod_value))
+                    mod_message = " minus penalty: "
+                else:
+                    modifier = " (modifiers cancelled themselves)"
+                    mod_message = " (modifiers cancelled themselves): "
                 print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) +
-                      face_faces + " plus " + str(mod_value) + ".\n" + sum_message + " plus bonus: " + str(summation) + ".")
+                      face_faces + modifier + ".\n" + sum_message + mod_message + str(summation) + ".")
 
-            # Roll result message (with penalty).
-            elif (mod_value != "") and (mod_value < 0):
-                mod_value = abs(mod_value)
-                summation -= mod_value
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) +
-                      face_faces + " minus " + str(mod_value) + ".\n" + sum_message + " minus penalty: " + str(summation) + ".")
-
-            # Roll result message (modifiers cancelled themselves)
-            elif (mod_value != "") and (mod_value == 0):
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) + face_faces +
-                      " (modifiers cancelled themselves).\n" + sum_message + " (the modifiers cancelled themselves): " + str(summation) + ".")
-
-            # Roll result message (no bonus or penalty).
+            # Roll result message (no modifier(s)).
             else:
                 print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(
                     dice_faces) + face_faces + ".\n" + sum_message + ": " + str(summation) + ".")
@@ -390,10 +357,10 @@ if (starting == True):
 
             # Error message with its reason.
             print("\nSorry, unable to understand.\nReason: " + error_reason)
-            user_input = str(input("\nPlease, try again (Type 'q' to Quit): "))
+            user_input = str(
+                input("\nPlease, try again ('q' to Quit, 'h' for Help): ")).lower()
             error = True
             continue
 
 # Quitting program.
-if (quitting == True):
-    print("\nThanks for using DiceMaster (v3.3.4). Hope you enjoyed it.\nPowered by Luis M. Isea.")
+print("\nThanks for using DiceMaster (v3.3.5). Hope you enjoyed it.\nPowered by Luis M. Isea.")

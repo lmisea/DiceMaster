@@ -1,4 +1,4 @@
-# DiceMaster version 3.3.5 - September 2022. Caracas, Venezuela.
+# DiceMaster version 3.3.6 - September 2022. Caracas, Venezuela.
 # Luis Miguel Isea - @LuimiDev (GitHub).
 
 import os
@@ -20,9 +20,9 @@ starting = False
 display_instructions = False
 instructions_page = 1
 
-first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nIt's as simply as writing first how many dice you want to roll, later write 'd' and next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' to START ROLLING or 'q' for QUITTING."
+first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nFirst write the number of dice you want to roll, later write 'd'\nand next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' to START ROLLING or 'q' for QUITTING."
 
-second_page_message = "HOW TO ADD A BONUS?\nAfter the standard syntax for rolling, just add '+' and then the bonus value. This will increase the total sum of the dice rolled by the bonus value.\nHOW TO ADD A PENALTY?\nAfter the standard syntax for rolling, just add '-' and then the penalty value. This will decrease the total sum of the dice rolled by the penalty value.\nFor example:\nIf you write '1d8+2', this will roll 1 die of 8 faces plus a 2 bonus.\nIf you write '8d12 -5', this will roll 8 dice of 12 faces minus a 5 penalty.\n\nPress 'p' for PREVIOUS PAGE, 's' to START ROLLING or 'q' for QUITTING."
+second_page_message = "HOW TO ADD A BONUS?\nAfter the standard syntax for rolling, just add '+' and then the bonus value.\nThis will increase the total sum of the dice rolled by the bonus value.\nHOW TO ADD A PENALTY?\nAfter the standard syntax for rolling, just add '-' and then the penalty value.\nThis will decrease the total sum of the dice rolled by the penalty value.\nFor example:\nIf you write '1d8+2', this will roll 1 die of 8 faces plus a 2 bonus.\nIf you write '8d12 -5', this will roll 8 dice of 12 faces minus a 5 penalty.\n\nPress 'p' for PREVIOUS PAGE, 's' to START ROLLING or 'q' for QUITTING."
 
 
 def menu_press(key):
@@ -81,7 +81,7 @@ def instructions():
 
 
 # Displaying menu.
-print("DiceMaster v3.3.5 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print("DiceMaster v3.3.6 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 sshkeyboard.listen_keyboard(on_press=menu_press, until="")
 
@@ -107,7 +107,7 @@ if (starting == True):
             # First time roll message.
             if (first_time == True):
                 user_input = str(
-                    input("Please, write what you want to roll ('q' to Quit, 'h' for Help): ")).lower()
+                    input("What do you want to roll? (Type 'q' to Quit, 'h' for Help): ")).lower()
                 first_time = False
 
             # Further time roll message.
@@ -167,7 +167,7 @@ if (starting == True):
 
             # There's no number before the 'd'.
             if (dice_quantity == ""):
-                error_reason = "Before the letter 'd', it must be typed the number of dice to be rolled."
+                error_reason = "Before the 'd', specify the number of dice to be rolled."
                 raise ValueError
 
             dice_quantity = int(dice_quantity)
@@ -182,9 +182,12 @@ if (starting == True):
             if (dice_quantity == 1):
                 die_dice = " die"
                 sum_message = "Result"
-            else:
+            elif (dice_quantity <= 1000):
                 die_dice = " dice"
                 sum_message = "Total sum"
+            else:
+                error_reason = "Rolling more than one thousand dice? Isn't that too much?"
+                raise ValueError
 
             list_input = list(user_input)
             d_idx = user_input.index("d") + 1
@@ -274,7 +277,7 @@ if (starting == True):
 
             # There's no number after the 'd'.
             if (dice_faces == ""):
-                error_reason = "After the letter 'd', it must be typed the number of faces that the dice will have."
+                error_reason = "After the 'd', specify the number of faces that the dice have."
                 raise ValueError
 
             dice_faces = int(dice_faces)
@@ -290,23 +293,24 @@ if (starting == True):
             else:
                 face_faces = " faces"
 
-            # If we run this code, there's no error in user's input.
-            error = False
-
-            row_to_do = True  # Used to display each dice result.
-            print("")
-
             # For organized result output.
             if (dice_faces <= 99):
-                list_width = 25
+                list_width = 20
             elif (dice_faces <= 999):
-                list_width = 22
-            elif (dice_faces <= 9999):
-                list_width = 18
-            elif (dice_faces <= 99999):
                 list_width = 16
+            elif (dice_faces <= 9999):
+                list_width = 13
+            elif (dice_faces <= 99999):
+                list_width = 11
+            elif (dice_faces <= 1000000):
+                list_width = 8
             else:
-                list_width = 12
+                error_reason = "Dice of more than one million faces? Isn't that too much?"
+                raise ValueError
+
+            error = False  # Display further time roll message after this roll.
+            row_to_do = True  # Used to display each dice result.
+            print("")
 
             # Used to justify each dice result.
             dice_faces_digits = len(str(dice_faces))
@@ -356,11 +360,11 @@ if (starting == True):
         except:
 
             # Error message with its reason.
-            print("\nSorry, unable to understand.\nReason: " + error_reason)
+            print("\nSorry, unable to roll.\nReason: " + error_reason)
             user_input = str(
-                input("\nPlease, try again ('q' to Quit, 'h' for Help): ")).lower()
+                input("\nPlease, try again (Type 'q' to Quit, 'h' for Help): ")).lower()
             error = True
             continue
 
 # Quitting program.
-print("\nThanks for using DiceMaster (v3.3.5). Hope you enjoyed it.\nPowered by Luis M. Isea.")
+print("\nThanks for using DiceMaster (v3.3.6). Hope you enjoyed it.\nPowered by Luis M. Isea.")

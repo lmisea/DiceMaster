@@ -1,5 +1,10 @@
-# DiceMaster version 3.3.6 - September 2022. Caracas, Venezuela.
-# Luis Miguel Isea - @LuimiDev (GitHub).
+# DiceMaster version 3.3.6 - Caracas, Venezuela.
+# Copyright (C) <2022> <Luis Miguel Isea - @LuimiDev (GitHub)>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
 import os
 import random

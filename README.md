@@ -7,9 +7,9 @@ Also DiceMaster can do as many rollings as the user wants without having to rein
 
 
 ## REQUIREMENTS
-For runing it requieres a library called ***sshkeyboard*** under the MIT License.
+For runing it requieres a library called ***sshkeyboard*** under the [MIT License](https://github.com/ollipal/sshkeyboard/blob/main/LICENSE).
 
-GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ollipal/sshkeyboard)
+GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ollipal/sshkeyboard).
 
 How to Install? Copy to the terminal: `pip install sshkeyboard`
 

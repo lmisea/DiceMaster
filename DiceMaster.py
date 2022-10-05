@@ -1,4 +1,4 @@
-# DiceMaster version 3.3.6 - Caracas, Venezuela.
+# DiceMaster version 3.3.7 - Caracas, Venezuela.
 # Copyright (C) <2022> <Luis Miguel Isea - @LuimiDev (GitHub)>
 
 # This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,7 @@ def clear():
 
 clear()
 
-starting = False
-display_instructions = False
-instructions_page = 1
+starting, display_instructions, instructions_page = False, False, 1
 
 first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nFirst write the number of dice you want to roll, later write 'd'\nand next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' to START ROLLING or 'q' for QUITTING."
 
@@ -37,8 +35,7 @@ def menu_press(key):
     When 'q' is pressed, the program shuts down.\n
     When any other key is pressed, doesn't trigger anything.
     """
-    global starting
-    global display_instructions
+    global starting, display_instructions
 
     if (key == "s"):
         sshkeyboard.stop_listening()
@@ -58,8 +55,7 @@ def instructions_press(key):
     When 'q' is pressed, the program shuts down.\n
     When any other key is pressed, doesn't trigger anything.
     """
-    global instructions_page
-    global starting
+    global instructions_page, starting
     starting = False
 
     if (key == "n") and (instructions_page == 1):
@@ -86,7 +82,7 @@ def instructions():
 
 
 # Displaying menu.
-print("DiceMaster v3.3.6 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print("DiceMaster v3.3.7 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 sshkeyboard.listen_keyboard(on_press=menu_press, until="")
 
@@ -97,17 +93,13 @@ if (display_instructions == True):
 # Starting DiceMaster.
 if (starting == True):
     clear()
-    first_time = True
-    error_reason = ""
+    first_time, error_reason = True, ""
 
     while True:  # Breaks when user types 'q'.
 
         try:
-            dice_quantity = ""
-            dice_faces = ""
-            d_times = 0
-            summation = 0
-            result_list = []
+            dice_quantity, dice_faces, summation = "", "", 0
+            d_times, result_list = 0, []
 
             # First time roll message.
             if (first_time == True):
@@ -185,22 +177,17 @@ if (starting == True):
 
             # Setting singular or plural.
             if (dice_quantity == 1):
-                die_dice = " die"
-                sum_message = "Result"
-            elif (dice_quantity <= 1000):
-                die_dice = " dice"
-                sum_message = "Total sum"
+                die_dice, sum_message = " die", "Result"
+            elif (dice_quantity <= 100000):
+                die_dice, sum_message = " dice", "Total sum"
             else:
-                error_reason = "Rolling more than one thousand dice? Isn't that too much?"
+                error_reason = "Rolling more than one hundred thousand dice? Isn't that too much?"
                 raise ValueError
 
             list_input = list(user_input)
             d_idx = user_input.index("d") + 1
             final_char = len(list_input)
-            mod_to_do = ""
-            mod_value = ""
-            bonus = ""
-            penalty = ""
+            mod_to_do, mod_value, bonus, penalty = "", "", "", ""
 
             # Part after the 'd' in user's input.
             for character in range(d_idx, final_char):
@@ -212,25 +199,20 @@ if (starting == True):
                 # User added a bonus.
                 elif (list_input[character] == "+"):
                     mod_idx = user_input.index("+") + 1
-                    mod_to_do = True
-                    mod_type = "bonus"
-                    mod_value = 0
+                    mod_to_do, mod_type, mod_value = True, "bonus", 0
                     break
 
                 # User added a penalty.
                 elif (list_input[character] == "-"):
                     mod_idx = user_input.index("-") + 1
-                    mod_to_do = True
-                    mod_type = "penalty"
-                    mod_value = 0
+                    mod_to_do, mod_type, mod_value = True, "penalty", 0
                     break
 
             # If there's one modifier that the program hasn't determinate its value.
             while (mod_to_do == True):
 
                 # If it's the last modifier this won't run again.
-                mod_to_do = False
-                original_mod_idx = mod_idx
+                mod_to_do, original_mod_idx = False, mod_idx
 
                 # Checking what comes after the modifier.
                 for character in range(mod_idx, final_char):
@@ -248,10 +230,7 @@ if (starting == True):
                             mod_value += int(bonus)
                         elif (penalty != ""):
                             mod_value -= int(penalty)
-                        bonus = ""
-                        penalty = ""
-                        mod_to_do = True
-                        mod_type = "bonus"
+                        bonus, penalty, mod_to_do, mod_type = "", "", True, "bonus"
                         mod_idx = user_input.index(
                             "+", original_mod_idx, final_char) + 1
                         break
@@ -262,10 +241,7 @@ if (starting == True):
                             mod_value += int(bonus)
                         elif (penalty != ""):
                             mod_value -= int(penalty)
-                        bonus = ""
-                        penalty = ""
-                        mod_to_do = True
-                        mod_type = "penalty"
+                        bonus, penalty, mod_to_do, mod_type = "", "", True, "penalty"
                         mod_idx = user_input.index(
                             "-", original_mod_idx, final_char) + 1
                         break
@@ -372,4 +348,4 @@ if (starting == True):
             continue
 
 # Quitting program.
-print("\nThanks for using DiceMaster (v3.3.6). Hope you enjoyed it.\nPowered by Luis M. Isea.")
+print("\nThanks for using DiceMaster (v3.3.7). Hope you enjoyed it.\nPowered by Luis M. Isea.")

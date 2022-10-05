@@ -1,13 +1,15 @@
-# DiceMaster
+# DiceMaster version 3.3.7
+Copyright (C) 2022 Luis Miguel Isea
+
 DiceMaster is a Python project that can be used for **rolling any quantity of dice of any number of faces.**
-It is also my first Python project by the way :D  
+It is also my first Python project by the way :D
 
 The amazing thing about this project is that **it has a basic menu**, allowing the user to read the instructions as many times as it desires.
 Also DiceMaster can do as many rollings as the user wants without having to reinitialize or quitting.
 
 
 ## REQUIREMENTS
-For runing it requieres a library called ***sshkeyboard*** under the [MIT License](https://github.com/ollipal/sshkeyboard/blob/main/LICENSE).
+For running it requieres a library called ***sshkeyboard*** under the [MIT License](https://github.com/ollipal/sshkeyboard/blob/main/LICENSE).
 
 GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ollipal/sshkeyboard).
 

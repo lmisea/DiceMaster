@@ -1,4 +1,4 @@
-# DiceMaster version 3.3.7 - Caracas, Venezuela.
+# DiceMaster version 3.3.8 - Caracas, Venezuela.
 # Copyright (C) <2022> <Luis Miguel Isea - @LuimiDev (GitHub)>
 
 # This program is free software: you can redistribute it and/or modify
@@ -8,6 +8,7 @@
 
 import os
 import random
+import re
 import sshkeyboard
 
 
@@ -82,7 +83,7 @@ def instructions():
 
 
 # Displaying menu.
-print("DiceMaster v3.3.7 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
+print("DiceMaster v3.3.8 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n")
 
 sshkeyboard.listen_keyboard(on_press=menu_press, until="")
 
@@ -126,6 +127,10 @@ if (starting == True):
                 else:
                     break
 
+            # Removing space characters from user's input.
+            while (" " in user_input):
+                user_input = re.sub(" ", "", user_input)
+
             # Checking if the user's input is valid.
             for character in user_input:
 
@@ -135,7 +140,7 @@ if (starting == True):
                     raise ValueError
 
                 # User typed a punctuation character that is not "+" or "-".
-                if (character.isdigit() == False) and (character.isspace() == False) and (character != "d") and (character != "+") and (character != "-"):
+                if (character.isdigit() == False) and (character != "d") and (character != "+") and (character != "-"):
                     error_reason = "It cannot be typed a punctuation character that is not '+' or '-'."
                     raise ValueError
 
@@ -154,13 +159,13 @@ if (starting == True):
                 raise ValueError
 
             # Setting quantity of dice to be rolled.
-            for character in user_input:
+            d_idx = user_input.index("d")
+            dice_quantity = user_input[:d_idx]
 
-                if (character != "d"):
-                    dice_quantity += str(character)
-                    # If we use '+= int(character)', we could not handle numbers of two or more digits. E.g.: '24' would become 6.
-                else:
-                    break
+            # Modifier(s) inside the dice_quantity
+            if ("+" in dice_quantity) or ("-" in dice_quantity):
+                error_reason = "It cannot be typed '+' or '-' when specifying the dice quantity to be rolled."
+                raise ValueError
 
             # There's no number before the 'd'.
             if (dice_quantity == ""):
@@ -168,7 +173,6 @@ if (starting == True):
                 raise ValueError
 
             dice_quantity = int(dice_quantity)
-            original_dice_quantity = dice_quantity
 
             # Rolling 0 dice.
             if (dice_quantity == 0):
@@ -289,7 +293,8 @@ if (starting == True):
                 error_reason = "Dice of more than one million faces? Isn't that too much?"
                 raise ValueError
 
-            error = False  # Display further time roll message after this roll.
+            # There's no error in the input if we get to this part.
+            error, error_reason = False, ""
             row_to_do = True  # Used to display each dice result.
             print("")
 
@@ -326,16 +331,16 @@ if (starting == True):
                 else:
                     modifier = " (modifiers cancelled themselves)"
                     mod_message = " (modifiers cancelled themselves): "
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(dice_faces) +
+                print("\nDone. Rolled " + str(dice_quantity) + die_dice + " of " + str(dice_faces) +
                       face_faces + modifier + ".\n" + sum_message + mod_message + str(summation) + ".")
 
             # Roll result message (no modifier(s)).
             else:
-                print("\nDone. Rolled " + str(original_dice_quantity) + die_dice + " of " + str(
+                print("\nDone. Rolled " + str(dice_quantity) + die_dice + " of " + str(
                     dice_faces) + face_faces + ".\n" + sum_message + ": " + str(summation) + ".")
 
             # Showing highest die only if more than 1 die was rolled.
-            if (original_dice_quantity != 1):
+            if (dice_quantity != 1):
                 print("Highest die: " + str(max(result_list)) + ".")
 
         except:
@@ -348,4 +353,4 @@ if (starting == True):
             continue
 
 # Quitting program.
-print("\nThanks for using DiceMaster (v3.3.7). Hope you enjoyed it.\nPowered by Luis M. Isea.")
+print("\nThanks for using DiceMaster (v3.3.8). Hope you enjoyed it.\nPowered by Luis M. Isea.")

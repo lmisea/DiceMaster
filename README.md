@@ -12,12 +12,26 @@ For running it requieres a library called ***sshkeyboard*** under the [MIT Licen
 
 GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ollipal/sshkeyboard).
 
-**How to Install sshkeyboard?** Execute this command in the Terminal: `pip install sshkeyboard`
+**How to Install sshkeyboard?** Execute this command in the Terminal:
+```sh
+pip install sshkeyboard
+```
 
 Python Version I used: **Python 3.10.4**
 
 ## HOW TO RUN?
-Download **DiceMaster.py** and then open the Terminal, move to the path of DiceMaster and execute: `Python3 DiceMaster.py`
+It's really easy: first, clone the repo, then make sure yo have installed the **sshkeyboard** library and, finally, run **DiceMaster.py**.
+
+### Step 1: Clone the DiceMaster repo
+Make sure you are in the directory you want the program installed to before doing this.
+```sh
+git clone https://github.com/LuimiDev/DiceMaster.git
+```
+### Step 2: Run the DiceMaster program with Python 3
+Make sure you are inside the directory where the repo was cloned.
+```sh
+python3 DiceMaster.py
+```
 
 ## LICENSE
 This program is free software: you can redistribute it and/or modify

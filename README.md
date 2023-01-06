@@ -13,16 +13,6 @@ It is also my first Python project by the way :D
 The amazing thing about this project is that **it has a basic menu**, allowing the user to read the instructions as many times as desired.
 Also DiceMaster can do as many rollings as the user wants without having to reinitialize or exit the program.
 
-## REQUIREMENTS
-A third-party Python library called ***sshkeyboard*** under the [MIT License](https://github.com/ollipal/sshkeyboard/blob/main/LICENSE) is required for running DiceMaster.
-
-GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ollipal/sshkeyboard).
-
-**How to Install sshkeyboard?** Execute this command in the Terminal:
-```sh
-pip3 install sshkeyboard
-```
-
 Python Version I used: **Python 3.10.4**
 
 ## HOW TO RUN?
@@ -33,12 +23,23 @@ Open a terminal in the directory where you want to install the program and then 
 ```sh
 git clone https://github.com/LuimiDev/DiceMaster.git
 ```
-### Step 2: Run the DiceMaster program with Python 3
+### Step 2: Install the Requirements
+A third-party Python library called ***sshkeyboard*** under the [MIT License](https://github.com/ollipal/sshkeyboard/blob/main/LICENSE) is required for running DiceMaster.
+
+GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ollipal/sshkeyboard).
+
+**How to Install sshkeyboard?** Make sure the terminal is open in the directory where the repo was cloned and the execute this command in the terminal:
+```sh
+pip3 install -r requirements.txt
+```
+This will install the exact same library version I used for my project and therefore there will not be no issue.
+
+### Step 3: Run the DiceMaster program with Python 3
 Make sure the terminal is open in the directory where the repo was cloned and run DiceMaster with Python 3:
 ```sh
 python3 DiceMaster.py
 ```
-### Step 3: Read the Instructions and Have Fun
+### Step 4: Read the Instructions and Have Fun
 Once DiceMaster.py is running, just press the '**i**' key and you will be able to read the instructions. Have fun :D
 
 ## LICENSE

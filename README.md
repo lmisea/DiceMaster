@@ -32,7 +32,7 @@ GitHub Repository of the Library: [Sshkeyboard-Repository](https://github.com/ol
 ```sh
 pip3 install -r requirements.txt
 ```
-This will install the exact same library version I used for my project and therefore there will not be no issue.
+This will install the exact same library version I used for my project and therefore there will not be any issue.
 
 ### Step 3: Run the DiceMaster program with Python 3
 Make sure the terminal is open in the directory where the repo was cloned and run DiceMaster with Python 3:

@@ -11,9 +11,10 @@ import re
 
 import sshkeyboard
 from rolling import roll
+from tools import utilities
 
 if __name__ == "__main__":
-    roll.clear_terminal()
+    utilities.clear_terminal()
 
     starting, display_instructions, instructions_page = False, False, 1
 
@@ -52,11 +53,11 @@ if __name__ == "__main__":
 
         if (key == "n") and (instructions_page == 1):
             instructions_page += 1
-            roll.clear_terminal()
+            utilities.clear_terminal()
             print(second_page_message)
         if (key == "p") and (instructions_page == 2):
             instructions_page -= 1
-            roll.clear_terminal()
+            utilities.clear_terminal()
             print(first_page_message)
         elif (key == "s"):
             starting = True
@@ -67,7 +68,7 @@ if __name__ == "__main__":
 
     def show_instructions():
         """Displays Instructions, for more info read instructions_press docstring."""
-        roll.clear_terminal()
+        utilities.clear_terminal()
         print(first_page_message)
         sshkeyboard.listen_keyboard(on_press=instructions_press, until="")
 
@@ -84,7 +85,7 @@ if __name__ == "__main__":
 
     # Starting DiceMaster.
     if (starting == True):
-        roll.clear_terminal()
+        utilities.clear_terminal()
         first_time, error_reason = True, ""
 
         while True:  # Breaks when user types 'q'.
@@ -115,7 +116,7 @@ if __name__ == "__main__":
                 if (user_input == "h") or (user_input == "help"):
                     show_instructions()
                     if (starting == True):
-                        roll.clear_terminal()
+                        utilities.clear_terminal()
                         first_time = True
                         continue
                     else:

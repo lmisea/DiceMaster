@@ -21,7 +21,7 @@ It's really easy: first, clone the repo, then make sure the **sshkeyboard** libr
 ### Step 1: Clone the DiceMaster repo
 Open a terminal in the directory where you want to install the program and then clone this repo typing this command:
 ```sh
-git clone https://github.com/lmisea/DiceMaster.git
+git clone https://github.com/lmisea/dicemaster.git
 ```
 ### Step 2: Install the Requirements
 A third-party Python library called ***sshkeyboard*** under the [MIT License](https://github.com/ollipal/sshkeyboard/blob/main/LICENSE) is required for running DiceMaster.

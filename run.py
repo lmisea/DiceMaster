@@ -10,82 +10,15 @@ import random
 import re
 import sys
 
-import sshkeyboard
 from rolling import roll
-from tools import utilities
+from tools import menu, utilities
 
 if __name__ == "__main__":
-    utilities.clear_terminal()
-
-    starting, display_instructions, instructions_page = False, False, 1
-
-    first_page_message = "INSTRUCTIONS\n\nHOW TO ROLL?\nYou can now roll any kind of die you want, just as many times you desire.\nFirst write the number of dice you want to roll, later write 'd'\nand next how many faces does that kind of dice have.\nFor example:\nIf you write '2d6', this will roll 2 dice of 6 faces.\nIf you write '100 d 20', this will roll 100 dice of 20 faces.\n\nPress 'n' for NEXT PAGE, 's' to START ROLLING or 'q' for QUITTING."
-
-    second_page_message = "HOW TO ADD A BONUS?\nAfter the standard syntax for rolling, just add '+' and then the bonus value.\nThis will increase the total sum of the dice rolled by the bonus value.\nHOW TO ADD A PENALTY?\nAfter the standard syntax for rolling, just add '-' and then the penalty value.\nThis will decrease the total sum of the dice rolled by the penalty value.\nFor example:\nIf you write '1d8+2', this will roll 1 die of 8 faces plus a 2 bonus.\nIf you write '8d12 -5', this will roll 8 dice of 12 faces minus a 5 penalty.\n\nPress 'p' for PREVIOUS PAGE, 's' to START ROLLING or 'q' for QUITTING."
-
-    def menu_press(key):
-        """
-        When 's' is pressed, starts the main functionality.\n
-        When 'i' is pressed, the instructions are displayed.\n
-        When 'q' is pressed, the program shuts down.\n
-        When any other key is pressed, doesn't trigger anything.
-        """
-        global starting, display_instructions
-
-        if (key == "s"):
-            sshkeyboard.stop_listening()
-            starting = True
-        elif (key == "i"):
-            sshkeyboard.stop_listening()
-            display_instructions = True
-        elif (key == "q"):
-            sshkeyboard.stop_listening()
-
-    def instructions_press(key):
-        """
-        When 'n' is pressed, the next instructions page is displayed.\n
-        When 'p' is pressed, the previous instructions page is displayed.\n
-        When 's' is pressed, starts the main functionality.\n
-        When 'q' is pressed, the program shuts down.\n
-        When any other key is pressed, doesn't trigger anything.
-        """
-        global instructions_page, starting
-        starting = False
-
-        if (key == "n") and (instructions_page == 1):
-            instructions_page += 1
-            utilities.clear_terminal()
-            print(second_page_message)
-        if (key == "p") and (instructions_page == 2):
-            instructions_page -= 1
-            utilities.clear_terminal()
-            print(first_page_message)
-        elif (key == "s"):
-            starting = True
-            sshkeyboard.stop_listening()
-            instructions_page = 1
-        elif (key == "q"):
-            sshkeyboard.stop_listening()
-
-    def show_instructions():
-        """Displays Instructions, for more info read instructions_press docstring."""
-        utilities.clear_terminal()
-        print(first_page_message)
-        sshkeyboard.listen_keyboard(on_press=instructions_press, until="")
-
-    # Displaying menu.
-    print(
-        "DiceMaster v3.3.9 - Powered by Luis M. Isea.\n\nPress 's' for STARTING.\nPress 'i' for INSTRUCTIONS.\nPress 'q' for QUITTING.\nDISCLAIMER: It's highly recommended to read the Instructions the first time.\n"
-    )
-
-    sshkeyboard.listen_keyboard(on_press=menu_press, until="")
-
-    # User pressed 'i' - Displaying instructions.
-    if (display_instructions == True):
-        show_instructions()
+    # Welcome the user with the menu
+    menu.display_menu()
 
     # Starting DiceMaster.
-    if (starting == True):
+    if (utilities.starting == True):
         utilities.clear_terminal()
         first_time, error_reason = True, ""
 

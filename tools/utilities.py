@@ -7,3 +7,7 @@ def clear_terminal() -> None:
         os.system("cls")
     else:
         os.system("clear")
+
+
+starting: bool = False
+display_instructions: bool = False

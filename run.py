@@ -8,6 +8,7 @@
 
 import random
 import re
+import sys
 
 import sshkeyboard
 from rolling import roll
@@ -359,3 +360,4 @@ if __name__ == "__main__":
     print(
         "\nThanks for using DiceMaster (v3.3.9). Hope you enjoyed it.\nPowered by Luis M. Isea."
     )
+    sys.exit()

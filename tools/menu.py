@@ -3,22 +3,20 @@ from tools import key_functions, utilities
 
 
 def display_instructions() -> None:
-    """Displays instructions, for more info read instructions_press docstring."""
-    utilities.clear_terminal()
-    print(instructions_first_page)
-    sshkeyboard.listen_keyboard(on_press=key_functions.instructions_press,
-                                until="")
+	"""Displays instructions, for more info read instructions_press docstring."""
+	utilities.clear_terminal()
+	print(instructions_first_page)
+	sshkeyboard.listen_keyboard(on_press=key_functions.instructions_press,
+	                            until="")
 
 
 def display_menu() -> None:
-    """Displays a basic Menu, with welcome message, instructions, starting and quitting."""
-    utilities.clear_terminal()
-    print(menu_message)
-    sshkeyboard.listen_keyboard(on_press=key_functions.menu_press, until="")
-
-    # User pressed 'i' - Displaying instructions.
-    if (utilities.display_instructions == True):
-        display_instructions()
+	"""Displays a basic Menu, with welcome message, instructions, starting and quitting."""
+	utilities.clear_terminal()
+	print(menu_message)
+	sshkeyboard.listen_keyboard(on_press=key_functions.menu_press, until="")
+	if (utilities.display_instructions == True):
+		display_instructions()
 
 
 instructions_page: int = 1

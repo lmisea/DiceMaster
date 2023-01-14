@@ -20,7 +20,9 @@ if __name__ == "__main__":
     # Starting DiceMaster.
     if (utilities.starting == True):
         utilities.clear_terminal()
-        first_time, error_reason = True, ""
+        first_time : bool = True
+        error_reason : str
+        error: bool
 
         while True:  # Breaks when user types 'q'.
 
@@ -48,8 +50,8 @@ if __name__ == "__main__":
 
                 # User typed 'h'.
                 if (user_input == "h") or (user_input == "help"):
-                    show_instructions()
-                    if (starting == True):
+                    menu.display_instructions()
+                    if (utilities.starting == True):
                         utilities.clear_terminal()
                         first_time = True
                         continue

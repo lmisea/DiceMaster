@@ -1,5 +1,6 @@
 import os
 from collections import Counter
+from typing import Any
 
 
 def clear_terminal() -> None:
@@ -10,7 +11,7 @@ def clear_terminal() -> None:
 		os.system("clear")
 
 
-def process_input(user_input: str) -> list:
+def process_input(user_input: str) -> dict[str, Any]:
 	"""Checks if the user's input is valid and returns the data of the request (dice to be rolled, num of faces, etc).
 	If the input is not valid it returns the error and its reason.
 
@@ -18,7 +19,7 @@ def process_input(user_input: str) -> list:
 		user_input (str): The user's input
 
 	Returns:
-		request (list): [valid: bool, dice_quantity: int, num_faces: int, modifier: int, error_reason: str]
+		request (dict): ['valid' : bool, 'dice_quantity' : int, 'num_faces' : int, 'modifier' : int, 'error_reason' : str]
 
 	valid: 'True' if the input is understandable for the program;
 	'False' if there were an error in the input's syntax.
@@ -36,7 +37,7 @@ def process_input(user_input: str) -> list:
 	allowing the user to understand what to change to make a valid request ('' if the input is valid).
 	"""
 	# Declaring variables and giving them default values
-	request: list
+	request: dict
 	valid: bool
 	dice_quantity: int
 	num_faces: int
@@ -55,7 +56,13 @@ def process_input(user_input: str) -> list:
 	if number_of_d < 1:
 		valid = False
 		error_reason = "There's no 'd', it has be typed in order to roll anything."
-		request = [valid, dice_quantity, num_faces, modifier, error_reason]
+		request = {
+		    'valid': valid,
+		    'dice_quantity': dice_quantity,
+		    'num_faces': num_faces,
+		    'modifier': modifier,
+		    'error_reason': error_reason
+		}
 		return request
 	elif number_of_d > 1:
 		valid = False

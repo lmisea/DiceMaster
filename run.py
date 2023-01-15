@@ -1,5 +1,5 @@
-# DiceMaster version 3.3.9 - Caracas, Venezuela.
-# Copyright (C) <2022> <Luis Miguel Isea - @lmisea (GitHub)>
+# DiceMaster version 3.4.0 - Caracas, Venezuela.
+# Copyright (C) 2023 Luis Miguel Isea - @lmisea (GitHub)
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -293,6 +293,6 @@ if __name__ == "__main__":
 
     # Quitting program.
     print(
-        "\nThanks for using DiceMaster (v3.3.9). Hope you enjoyed it.\nPowered by Luis M. Isea."
+        "\nThanks for using DiceMaster (v3.4.0). Hope you enjoyed it.\nPowered by Luis M. Isea."
     )
     sys.exit()

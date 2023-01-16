@@ -55,20 +55,10 @@ def process_input(user_input: str) -> Request:
 
 	user_input = user_input.lower()          # Turns everything to lowercase
 	user_input = user_input.replace(' ', '') # Deletes any space in the input
-	any_other_letter_than_d = user_input.replace('d', '')
-	if any_other_letter_than_d.islower():
-		request[
-		    'error_reason'] = "It cannot be typed a letter that is not 'd'."
-		return request
-
-	punctuation_set: set = set('''!"#$%&'()*,./:;<=>?@[\]^_`{|}~''')
-	if any(character in punctuation_set for character in user_input):
-		request[
-		    'error_reason'] = "It cannot be typed a punctuation character that is not '+' or '-'."
 
 	# Creating an instance of the Counter Class allows to count really fast how many d's the input has
-	input_counter = Counter(user_input)
-	number_of_d = input_counter['d']
+	input_counter: Counter = Counter(user_input)
+	number_of_d: int = input_counter['d']
 	if number_of_d < 1:
 		request[
 		    'error_reason'] = "There's no 'd', it has be typed in order to roll anything."
@@ -78,8 +68,20 @@ def process_input(user_input: str) -> Request:
 		    'error_reason'] = "The letter 'd' must be typed once and only once."
 		return request
 
+	# Checking there's no invalid char in the input
+	any_other_letter_than_d : str = user_input.replace('d', '')
+	punctuation_set: set = set('''!"#$%&'()*,./:;<=>?@[\]^_`{|}~''')
+	if any_other_letter_than_d.islower():
+		request[
+		    'error_reason'] = "It cannot be typed a letter that is not 'd'."
+		return request
+	elif any(character in punctuation_set for character in user_input):
+		request[
+		    'error_reason'] = "It cannot be typed a punctuation character that is not '+' or '-'."
+		return request
+
 	# Setting quantity of dice to be rolled.
-	d_idx = user_input.index("d")
+	d_idx: int = user_input.index("d")
 	if user_input[:d_idx] == '':
 		request[
 		    'error_reason'] = "Before the 'd', specify the number of dice to be rolled."
@@ -90,8 +92,28 @@ def process_input(user_input: str) -> Request:
 		return request
 	else:
 		request['dice_quantity'] = int(user_input[:d_idx])
+
 	if (request['dice_quantity'] == 0):
 		request['error_reason'] = "It's impossible to roll 0 dice."
+		return request
+
+	# Setting quantity of faces for each die.
+	d_idx += 1   # Now that d_idx will be the start, adding 1 so it doesn't catch the d
+	if user_input[d_idx:] == '':
+		request[
+		    'error_reason'] = "After the 'd', specify the number of faces that the dice have."
+		return request
+	elif '+' in user_input[d_idx:]:
+		bonus_idx = user_input[d_idx:].index('+') + d_idx
+		request['num_faces'] = int(user_input[d_idx:bonus_idx])
+	elif '-' in user_input[d_idx:]:
+		penalty_idx = user_input[d_idx:].index('-') + d_idx
+		request['num_faces'] = int(user_input[d_idx:penalty_idx])
+	else:
+		request['num_faces'] = int(user_input[d_idx:])
+
+	if request['num_faces'] == 0:
+		request['error_reason'] = "It's impossible to roll dice of 0 faces."
 		return request
 
 	if request['error_reason'] == None:
@@ -99,9 +121,10 @@ def process_input(user_input: str) -> Request:
 	return request
 
 
-starting: bool = False
+start: bool = False
 display_instructions: bool = False
 
 if __name__ == '__main__':
 	hi = input('Say hi: ')
 	print(process_input(hi))
+	print('Done')

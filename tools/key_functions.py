@@ -10,7 +10,7 @@ def menu_press(key) -> None:
     """
 
 	if (key == "s"):
-		utilities.starting = True
+		utilities.start = True
 		sshkeyboard.stop_listening()
 	elif (key == "i"):
 		utilities.display_instructions = True
@@ -27,7 +27,7 @@ def instructions_press(key) -> None:
     When any other key is pressed, doesn't trigger anything.
     """
 
-	utilities.starting = False
+	utilities.start = False
 
 	if (key == "n") and (menu.instructions_page == 1):
 		menu.instructions_page += 1
@@ -38,7 +38,7 @@ def instructions_press(key) -> None:
 		utilities.clear_terminal()
 		print(menu.instructions_first_page)
 	elif (key == "s"):
-		utilities.starting = True
+		utilities.start = True
 		menu.instructions_page = 1
 		sshkeyboard.stop_listening()
 	elif (key == "q"):

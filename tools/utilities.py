@@ -69,7 +69,7 @@ def process_input(user_input: str) -> Request:
 		return request
 
 	# Checking there's no invalid char in the input
-	any_other_letter_than_d : str = user_input.replace('d', '')
+	any_other_letter_than_d: str = user_input.replace('d', '')
 	punctuation_set: set = set('''!"#$%&'()*,./:;<=>?@[\]^_`{|}~''')
 	if any_other_letter_than_d.islower():
 		request[
@@ -98,17 +98,23 @@ def process_input(user_input: str) -> Request:
 		return request
 
 	# Setting quantity of faces for each die.
-	d_idx += 1   # Now that d_idx will be the start, adding 1 so it doesn't catch the d
+	bonuses = input_counter['+']
+	penalties = input_counter['-']
+	modifiers = bonuses + penalties
+	d_idx += 1                                          # d_idx will be the start, adding 1 so it doesn't catch the d
 	if user_input[d_idx:] == '':
 		request[
 		    'error_reason'] = "After the 'd', specify the number of faces that the dice have."
 		return request
-	elif '+' in user_input[d_idx:]:
-		bonus_idx = user_input[d_idx:].index('+') + d_idx
-		request['num_faces'] = int(user_input[d_idx:bonus_idx])
-	elif '-' in user_input[d_idx:]:
-		penalty_idx = user_input[d_idx:].index('-') + d_idx
-		request['num_faces'] = int(user_input[d_idx:penalty_idx])
+	elif modifiers > 1:
+		if bonuses > 1 and penalties < 1:
+			modifier_idx = user_input[d_idx:].index('+') + d_idx
+		elif penalties > 1 and bonuses < 1:
+			modifier_idx = user_input[d_idx:].index('-') + d_idx
+		else:
+			modifier_idx = min(user_input[d_idx:].index('+'),
+			                   user_input[d_idx:].index('-')) + d_idx
+		request['num_faces'] = int(user_input[d_idx:modifier_idx])
 	else:
 		request['num_faces'] = int(user_input[d_idx:])
 

@@ -98,23 +98,64 @@ def process_input(user_input: str) -> Request:
 		return request
 
 	# Setting quantity of faces for each die.
-	bonuses = input_counter['+']
-	penalties = input_counter['-']
-	modifiers = bonuses + penalties
+	bonuses: int = input_counter['+']
+	penalties: int = input_counter['-']
+	modifiers: int = bonuses + penalties
 	d_idx += 1                                          # d_idx will be the start, adding 1 so it doesn't catch the d
 	if user_input[d_idx:] == '':
 		request[
 		    'error_reason'] = "After the 'd', specify the number of faces that the dice have."
 		return request
-	elif modifiers > 1:
-		if bonuses > 1 and penalties < 1:
+	elif modifiers > 0:
+		if bonuses > 0 and penalties < 1:
 			modifier_idx = user_input[d_idx:].index('+') + d_idx
-		elif penalties > 1 and bonuses < 1:
+		elif penalties > 0 and bonuses < 1:
 			modifier_idx = user_input[d_idx:].index('-') + d_idx
 		else:
 			modifier_idx = min(user_input[d_idx:].index('+'),
 			                   user_input[d_idx:].index('-')) + d_idx
-		request['num_faces'] = int(user_input[d_idx:modifier_idx])
+
+		if user_input[d_idx:modifier_idx] != '':
+			request['num_faces'] = int(user_input[d_idx:modifier_idx])
+		else:
+			request[
+			    'error_reason'] = "After the 'd' and before a modifier ('+', '-'), specify the number of faces that the dice have."
+			return request
+
+		# Setting the modifier
+		for modifier in range(modifiers):
+			modifier_idx += 1
+			if user_input[modifier_idx:] == '':
+				request[
+				    'error_reason'] = "After a modifier ('+' or '-'), specify its value. One of the modifiers doesn't have a value."
+				return request
+			elif '+' not in user_input[
+			    modifier_idx:] and '-' not in user_input[modifier_idx:]:
+				request['modifier'] += int(user_input[modifier_idx - 1:])
+				break
+			elif '+' in user_input[modifier_idx:] and '-' not in user_input[
+			    modifier_idx:]:
+				next_modifier = user_input[modifier_idx:].index(
+				    '+') + modifier_idx
+			elif '-' in user_input[modifier_idx:] and '+' not in user_input[
+			    modifier_idx:]:
+				next_modifier = user_input[modifier_idx:].index(
+				    '-') + modifier_idx
+			elif "+" in user_input[modifier_idx:] and '-' in user_input[
+			    modifier_idx:]:
+				next_modifier = min(
+				    user_input[modifier_idx:].index('+'),
+				    user_input[modifier_idx:].index('-')) + modifier_idx
+
+			if user_input[modifier_idx:next_modifier] != '':
+				modifier_idx -= 1
+				request['modifier'] += int(
+				    user_input[modifier_idx:next_modifier])
+			else:
+				request[
+				    'error_reason'] = "After a modifier ('+' or '-'), specify its value. One of the modifiers doesn't have a value."
+				return request
+			modifier_idx = next_modifier
 	else:
 		request['num_faces'] = int(user_input[d_idx:])
 
@@ -122,15 +163,10 @@ def process_input(user_input: str) -> Request:
 		request['error_reason'] = "It's impossible to roll dice of 0 faces."
 		return request
 
-	if request['error_reason'] == None:
-		request['valid'] = True
+	# If this is executed it's because there's no error in the input
+	request['valid'] = True
 	return request
 
 
 start: bool = False
 display_instructions: bool = False
-
-if __name__ == '__main__':
-	hi = input('Say hi: ')
-	print(process_input(hi))
-	print('Done')

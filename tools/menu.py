@@ -1,5 +1,6 @@
 import sshkeyboard
-from tools import key_functions, utilities
+
+from . import key_functions, utilities
 
 
 def display_instructions() -> None:

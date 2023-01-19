@@ -1,5 +1,6 @@
 import sshkeyboard
-from tools import menu, utilities
+
+from . import menu, utilities
 
 
 def menu_press(key) -> None:
@@ -17,6 +18,7 @@ def menu_press(key) -> None:
 		sshkeyboard.stop_listening()
 	elif (key == "q"):
 		sshkeyboard.stop_listening()
+		utilities.quit_program()
 
 
 def instructions_press(key) -> None:
@@ -43,3 +45,4 @@ def instructions_press(key) -> None:
 		sshkeyboard.stop_listening()
 	elif (key == "q"):
 		sshkeyboard.stop_listening()
+		utilities.quit_program()

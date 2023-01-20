@@ -26,8 +26,13 @@ def roll_dice(request: Request) -> Result:
 	"""
 	result: Result = {'results': [], 'total': 0, 'highest': 0}
 
-	for die in range(request['dice_quantity']):
-		result['results'].append(secrets.randbelow(request['num_faces']) + 1)
+	# for die in range(request['dice_quantity']):
+	# 	result['results'].append(secrets.randbelow(request['num_faces']) + 1)
+
+	result['results'] = [
+	    secrets.randbelow(request['num_faces']) + 1
+	    for die in range(request['dice_quantity'])
+	]
 
 	result['total'] = sum(result['results']) + request['modifier']
 	result['highest'] = max(result['results'])
@@ -48,7 +53,8 @@ def display_results(result: Result, request: Request) -> None:
 	num_faces_digits: int = len(str(request['num_faces']))
 	# 80 is the max num of char that I want to display per line, but the
 	# last die result doesn't have 2 spaces at the end, so I add 2 to the max
-	width: int = 82 // (num_faces_digits+2) # with the // the floor is returned
+	# the // returns floor
+	width: int = 82 // (num_faces_digits+2)
 	dice_number: int = 1
 	for die in result['results']:
 		if dice_number % width != 0 and dice_number != request['dice_quantity']:
@@ -56,4 +62,27 @@ def display_results(result: Result, request: Request) -> None:
 		else:
 			print('%*d' % (num_faces_digits, die), end='\n')
 		dice_number += 1
-	print('\nEczelente\n')
+
+	# Adapting result message to the rolling
+	if request['modifier'] == 0:
+		total_message: str = f'Total: {result["total"]}'
+	elif request['modifier'] > 0:
+		total_message = f'Total plus {request["modifier"]} bonus: {result["total"]}'
+	else:
+		total_message = f'Total minus {abs(request["modifier"])} penalty: {result["total"]}'
+
+	if request['dice_quantity'] > 1:
+		die_dice: str = f'{request["dice_quantity"]} dice'
+		highest_message: str = f'Highest die: {result["highest"]}\n'
+	else:
+		die_dice = '1 die'
+		highest_message = ''
+
+	if request['num_faces'] > 1:
+		face_faces: str = f'{request["num_faces"]} faces'
+	else:
+		face_faces = '1 face'
+
+	print(
+	    f'\nRolled {die_dice} of {face_faces}\n{total_message}\n{highest_message}'
+	)

@@ -32,7 +32,7 @@ def process_input(user_input: str) -> Request:
 		user_input (str): The user's input
 
 	Returns:
-		request (Request): {'dice_quantity' : int, 'num_faces' : int, 'modifier' : int, 'error' : str | None}
+		request (Request): {'dice_quantity': int, 'num_faces': int, 'modifier': int, 'error': str | None}
 	"""
 	request: Request = {
 	    'dice_quantity': 0,

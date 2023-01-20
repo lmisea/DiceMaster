@@ -34,9 +34,7 @@ if __name__ == "__main__":
 			continue
 
 		# Rolling the user's request
-		result: roll.Result = roll.roll_dice(request['dice_quantity'],
-		                                     request['num_faces'],
-		                                     request['modifier'])
+		result: roll.Result = roll.roll_dice(request)
 		roll.display_results(result, request)
 
 		# # Setting singular or plural.

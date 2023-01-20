@@ -9,9 +9,7 @@ def menu_press(key) -> None:
     When 'q' is pressed, the program is terminated.\n
     When any other key is pressed, doesn't trigger anything.
     """
-
 	if (key == "s"):
-		utilities.start = True
 		sshkeyboard.stop_listening()
 	elif (key == "i"):
 		utilities.display_instructions = True
@@ -28,9 +26,6 @@ def instructions_press(key) -> None:
     When 'q' is pressed, the program is terminated.\n
     When any other key is pressed, doesn't trigger anything.
     """
-
-	utilities.start = False
-
 	if (key == "n") and (menu.instructions_page == 1):
 		menu.instructions_page += 1
 		utilities.clear_terminal()
@@ -40,7 +35,6 @@ def instructions_press(key) -> None:
 		utilities.clear_terminal()
 		print(menu.instructions_first_page)
 	elif (key == "s"):
-		utilities.start = True
 		menu.instructions_page = 1
 		sshkeyboard.stop_listening()
 	elif (key == "q"):

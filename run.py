@@ -28,7 +28,16 @@ if __name__ == "__main__":
 		else:
 			request: utilities.Request = utilities.process_input(user_input)
 
-		print(request)
+		# Check and catch any error in the input
+		if request.get('error') is not None:
+			print(f"\nSorry, unable to roll.\nReason: {request['error']}\n")
+			continue
+
+		# Rolling the user's request
+		result: roll.Result = roll.roll_dice(request['dice_quantity'],
+		                                     request['num_faces'],
+		                                     request['modifier'])
+		roll.display_results(result, request)
 
 		# # Setting singular or plural.
 		# if (dice_quantity == 1):

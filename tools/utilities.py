@@ -25,29 +25,14 @@ def quit_program() -> None:
 
 
 def process_input(user_input: str) -> Request:
-	"""Checks if the user's input is valid and returns the data of the request (dice to be rolled, num of faces, etc).
-	If the input is not valid it returns the error and its reason.
+	"""Returns the necessary data for rolling (number of dice to be rolled, number of faces of each die, etc).
+	If the input is valid request['error] is set to None, otherwise request['error'] explains why the request is not valid.
 
 	Args:
 		user_input (str): The user's input
 
 	Returns:
-		request (Request): ['dice_quantity' : int, 'num_faces' : int, 'modifier' : int, 'error' : str | None]
-
-	valid: 'True' if the input is understandable for the program;
-	'False' if there were an error in the input's syntax.
-
-	dice_quantity: The amount of dice needed to be rolled;
-	'0' if not valid input were given.
-
-	num_faces: The number of faces each die has;
-	'0' if not valid input were given.
-
-	modifier: The number who will be added to the total sum of the dice rolled
-	(if negative it will decrease the total sum). '0' by default.
-
-	error: If the input is not valid, contains a little explanation of why the input is invalid,
-	allowing the user to understand what to change to make a valid request ('None' if the input is valid).
+		request (Request): {'dice_quantity' : int, 'num_faces' : int, 'modifier' : int, 'error' : str | None}
 	"""
 	request: Request = {
 	    'dice_quantity': 0,
@@ -167,5 +152,4 @@ def process_input(user_input: str) -> Request:
 	return request
 
 
-start: bool = False
 display_instructions: bool = False

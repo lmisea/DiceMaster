@@ -1,5 +1,5 @@
 # DiceMaster version 3.4.0 - Caracas, Venezuela.
-# Copyright (C) 2023 Luis Miguel Isea - @lmisea (GitHub)
+# Copyright (C) 2023 - Luis Miguel Isea @lmisea (GitHub)
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

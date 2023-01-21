@@ -65,24 +65,22 @@ def display_results(result: Result, request: Request) -> None:
 
 	# Adapting result message to the rolling
 	if request['modifier'] == 0:
-		total_message: str = f'Total: {result["total"]}'
-	elif request['modifier'] > 0:
-		total_message = f'Total plus {request["modifier"]} bonus: {result["total"]}'
+		total_message: str = 'Total'
 	else:
-		total_message = f'Total minus {abs(request["modifier"])} penalty: {result["total"]}'
+		total_message = 'Total adding a modifier of %+d' % (request["modifier"])
 
 	if request['dice_quantity'] > 1:
-		die_dice: str = f'{request["dice_quantity"]} dice'
+		die_dice: str = 'dice'
 		highest_message: str = f'Highest die: {result["highest"]}\n'
 	else:
-		die_dice = '1 die'
+		die_dice = 'die'
 		highest_message = ''
 
 	if request['num_faces'] > 1:
-		face_faces: str = f'{request["num_faces"]} faces'
+		face_faces: str = 'faces'
 	else:
-		face_faces = '1 face'
+		face_faces = 'face'
 
 	print(
-	    f'\nRolled {die_dice} of {face_faces}\n{total_message}\n{highest_message}'
+	    f'\nRolled {request["dice_quantity"]} {die_dice} of {request["num_faces"]} {face_faces}\n{total_message}: {result["total"]}\n{highest_message}'
 	)

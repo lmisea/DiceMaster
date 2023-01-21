@@ -28,7 +28,7 @@ if __name__ == "__main__":
 			request: utilities.Request = utilities.process_input(user_input)
 
 		# Check and catch any error in the input
-		if request.get('error') is not None:
+		if request.get('valid') is False:
 			print(f"\nSorry, unable to roll.\nReason: {request['error']}\n")
 			continue
 

@@ -3,6 +3,7 @@
 # More info here - https://docs.python.org/3/library/secrets.html
 import secrets
 import sys
+from typing import List
 
 if sys.version_info >= (3, 8):
 	from typing import TypedDict
@@ -13,7 +14,7 @@ from tools.utilities import Request
 
 
 class Result(TypedDict):
-	results: list[int]
+	results: List[int]
 	total: int
 	highest: int
 
@@ -29,9 +30,6 @@ def roll_dice(request: Request) -> Result:
 		result (Result): {'results': list[int], 'total': int, 'highest': int}. A Result object can be obtained from roll.roll_dice()
 	"""
 	result: Result = {'results': [], 'total': 0, 'highest': 0}
-
-	# for die in range(request['dice_quantity']):
-	# 	result['results'].append(secrets.randbelow(request['num_faces']) + 1)
 
 	result['results'] = [
 	    secrets.randbelow(request['num_faces']) + 1

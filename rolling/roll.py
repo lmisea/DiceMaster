@@ -1,9 +1,13 @@
 # For the dice rolling I'm moving from random module to secrets module
 # because random module is less trusted than secrets module, who produces stronger random numbers.
 # More info here - https://docs.python.org/3/library/secrets.html
-
 import secrets
-from typing import TypedDict
+import sys
+
+if sys.version_info >= (3, 8):
+	from typing import TypedDict
+else:
+	from typing_extensions import TypedDict
 
 from tools.utilities import Request
 
@@ -67,7 +71,8 @@ def display_results(result: Result, request: Request) -> None:
 	if request['modifier'] == 0:
 		total_message: str = 'Total'
 	else:
-		total_message = 'Total adding a modifier of %+d' % (request["modifier"])
+		total_message = 'Total adding a modifier of %+d' % (
+		    request["modifier"])
 
 	if request['dice_quantity'] > 1:
 		die_dice: str = 'dice'
